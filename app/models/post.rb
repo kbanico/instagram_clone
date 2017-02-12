@@ -8,6 +8,9 @@ class Post < ApplicationRecord
     content_type: { content_type: ["image/jpeg", "image/gif", "image/png"] }
     
     belongs_to :user
+    has_many :comments, dependent: :destroy
+    
+    validates :caption, presence: true, length: {maximum: 300, minimum: 3}
     
     
 end
