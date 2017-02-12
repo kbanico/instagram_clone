@@ -1,6 +1,7 @@
 class PostsController < ApplicationController
     before_action :authenticate_user!, only: [:new, :edit, :update, :destroy, :index]
     before_action :set_post, only: [:show, :edit, :update, :destroy]
+    before_action :owned_post, only: [:edit, :update, :destroy]
     
     def index
         @posts = Post.all
@@ -26,6 +27,11 @@ class PostsController < ApplicationController
     
     
     def edit
+        # # version 1 to prevent other users from editing
+        # if current_user.id != @post.user_id
+        #     flash[:danger] = "You are not allowed to do that"
+        #     redirect_to root_path
+        # end
     end
     
     def update
@@ -52,5 +58,12 @@ class PostsController < ApplicationController
     
     def post_params
         params.require(:post).permit(:image, :caption)
+    end
+    
+    def owned_post
+        if current_user != @post.user
+            flash[:danger] = "That post doesn't belong to you!"
+            redirect_to root_path
+        end
     end
 end
