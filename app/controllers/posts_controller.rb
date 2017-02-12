@@ -11,7 +11,7 @@ class PostsController < ApplicationController
     end
     
     def create
-        @post = Post.new
+        @post = current_user.posts.create(post_params)
         if @post.save
             flash[:success] = "Your post has been created!"
             redirect_to posts_path
