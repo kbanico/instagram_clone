@@ -6,6 +6,9 @@ class Post < ApplicationRecord
     validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
     
     belongs_to :user
+    has_many :comments, dependent: :destroy
+    
+    validates :caption, presence: true, length: {maximum: 300, minimum: 3}
     
     
 end
